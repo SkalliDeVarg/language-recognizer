@@ -1,0 +1,15 @@
+Output after 2.500.000 word training with all 10 languages
+Tested with 250.000 words
+
+afr success: 58.755473426264416%   difficult
+cze success: 79.70368010195953%    easy
+esp success: 80.91836329721792%    easy
+fre success: 78.61041984426427%    medium
+ger success: 74.5976736775016%     medium
+ita success: 71.18705035971223%    medium
+lat success: 83.62629424512401%    easy
+nla success: 60.288065843621396%   difficult
+pol success: 78.96205357142857%    medium
+swe success: 74.8157936889316%     medium
+
+Total success: 74.1696%
