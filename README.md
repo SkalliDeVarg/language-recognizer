@@ -1,28 +1,29 @@
 # language-recognizer
 Neuron based AI which learns languages, recognizes their specific patterns and determines the language of a given word.
 
-This program is fully modular, takes as much languages as you want (and your RAM is able to manage), has stacked patterns for 1 to 4 letter constructions which are specific on the location etc.
+This program is fully modular, takes as much languages as you want (and your RAM is able to manage), 
+has stacked patterns for 1 to 4 letter constructions which are specific on the location etc.
 
 It works like that:
 
-Letters
-    Neuron Layers
-    1   2   3   4
-E - E 
-        EX
-X - X       EXA
-        XA      EXAM
-A - A       XAM
-        AM      XAMP
-M - M       AMP
-        MP      AMPL
-P - P       MPL
-        PL      MPLE
-L - L       PLE  |
-        LE   |   |
-E - E    |   |   |
-    |    |   |   |
-   sum+ sum+sum+sum=chance
+    Letters
+    |   Neuron Layers
+    |   1   2   3   4
+    E - E   |   |   |
+            EX  |   |
+    X - X       EXA |
+            XA      EXAM
+    A - A       XAM
+            AM      XAMP
+    M - M       AMP
+            MP      AMPL
+    P - P       MPL
+            PL      MPLE
+    L - L       PLE  |
+            LE   |   |
+    E - E    |   |   |
+        |    |   |   |
+        sum+sum+sum+sum=chance
    
 It converts all words to a standard A-Z form to be more represantative, because recognizing a word by its special chars isn't much
 of an achivement.
