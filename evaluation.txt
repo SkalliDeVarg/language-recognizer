@@ -3,19 +3,35 @@ Minimum Word Length: 4
 Maximum Word Length: 25
 
 Trained on: 1.000.000 Words
-Took 5 Minutes 58 Seconds
-Took 2,5 GB RAM
-Tested on: 100.000 Words
+Took 6 Minutes 35 Seconds
+Took 3 GB RAM                               compared to version
+Tested on: 100.000                          without word end detection
 
-afr success: 55.87771203155818% difficult
-cze success: 77.83654325915577% easy
-esp success: 79.14023960535589% easy
-fre success: 77.16432865731463% easy
-ger success: 73.0622105898933%  medium
-ita success: 67.60759367856079% difficult
-lat success: 82.25790464862722% easy
-nla success: 56.8712273641851%  difficult
-pol success: 77.62145748987854% easy
-swe success: 74.10696467770904% medium
+afr success: 62.54190795489180% difficult   6.66% increase
+cze success: 82.64696954366083% easy        4.81% increase
+esp success: 83.34990059642146% easy        4.21% increase
+fre success: 81.88788210694015% easy        4.73% increase
+ger success: 71.37738853503186% difficult   1.68% decrease!
+ita success: 77.30115301934727% medium      9.69% increase
+lat success: 82.72140407504538% easy        0.46% increase
+nla success: 59.27155649461716% difficult   2.40% increase
+pol success: 80.41534181240063% easy        2.80% increase
+swe success: 77.12595266746891% medium      3.02% increase
 
-Total success: 72.136%
+Total success: 75.89200000000001%           3.75% increase
+
+
+Trained on: 2.500.000 Words
+
+afr success: 64.30031667134325% difficult
+cze success: 84.82326834680615% easy
+esp success: 84.35048477290098% easy
+fre success: 83.27299058653150% easy
+ger success: 74.13675829232184% medium
+ita success: 79.96717242483686% medium
+lat success: 83.96906803429762% easy
+nla success: 63.03255146002872% difficult
+pol success: 82.21027479091995% medium
+swe success: 79.40705769384653% medium
+
+Total success: 77.94640000000001%
