@@ -1,15 +1,21 @@
-Output after 2.500.000 word training with all 10 languages
-Tested with 250.000 words
+Pattern Length: 4
+Minimum Word Length: 4
+Maximum Word Length: 25
 
-afr success: 58.755473426264416%   difficult
-cze success: 79.70368010195953%    easy
-esp success: 80.91836329721792%    easy
-fre success: 78.61041984426427%    medium
-ger success: 74.5976736775016%     medium
-ita success: 71.18705035971223%    medium
-lat success: 83.62629424512401%    easy
-nla success: 60.288065843621396%   difficult
-pol success: 78.96205357142857%    medium
-swe success: 74.8157936889316%     medium
+Trained on: 1.000.000 Words
+Took 5 Minutes 58 Seconds
+Took 2,5 GB RAM
+Tested on: 100.000 Words
 
-Total success: 74.1696%
+afr success: 55.87771203155818% difficult
+cze success: 77.83654325915577% easy
+esp success: 79.14023960535589% easy
+fre success: 77.16432865731463% easy
+ger success: 73.0622105898933%  medium
+ita success: 67.60759367856079% difficult
+lat success: 82.25790464862722% easy
+nla success: 56.8712273641851%  difficult
+pol success: 77.62145748987854% easy
+swe success: 74.10696467770904% medium
+
+Total success: 72.136%
