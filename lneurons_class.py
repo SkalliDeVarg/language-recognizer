@@ -36,25 +36,25 @@ class LNeurons:
                 l = language index
         """
         self.nlang = len(names)
-        self.minlength = minlength
-        self.maxlength = maxlength
+        self.minlength = minlength + 1
+        self.maxlength = maxlength + 1
         self.plength = plength
         self.names = names
 
-        if minlength < plength:
+        if self.minlength < plength:
             print("Error, minimum word length has to be bigger or equal "
                   "to pattern length")
             quit()
 
-        self.wb = wordbooks_ask(self.nlang, self.minlength,
-                                self.maxlength, names)
+        self.wb = wordbooks_ask(self.nlang, self.minlength - 1,
+                                self.maxlength - 1, names)
 
         self.step = [0.00001, 0.0001, 0.001, 0.01]
         self.rating = [1, 1, 1, 1]
 
         self.ilang = [1 / self.nlang for i in range(self.nlang)]
 
-        self.neurons = [[[list(self.ilang) for i in range(26**(k + 1))]
+        self.neurons = [[[list(self.ilang) for i in range(27**(k + 1))]
                          for j in range(self.maxlength - k)]
                          for k in range(self.plength)]
 
@@ -113,7 +113,7 @@ class LNeurons:
                 for z in range(i + 1):
                     # The index number for single and combined letters gets
                     # determined by multiplying and adding up.
-                    index += word_index[j + z] * 26**z
+                    index += word_index[j + z] * 27**z
                 for k in range(self.nlang):
                     if k == chosen_lang:
                         self.neurons[i][j][index][k] += self.step[i]
@@ -171,7 +171,7 @@ class LNeurons:
                 for z in range(i + 1):
                     # The index number for single and combined letters gets
                     # determined by multiplying and adding up.
-                    index += word_index[j + z] * 26**z
+                    index += word_index[j + z] * 27**z
                 for k in range(self.nlang):
                     # The individual chances as determined in 'Neurons' add up
                     # per language.
@@ -210,9 +210,17 @@ class LNeurons:
 
     def convert_word(self, word):
         """Converts given word to A-Z format and checks length"""
-        return (convert(self.minlength, self.maxlength, word))
+        return (convert(self.minlength - 1, self.maxlength - 1, word))
 
     @staticmethod
     def check_all():
         """Checks for foreign letters in wordlist"""
         check_all()
+
+    @staticmethod
+    def repr_word(word):
+        for i in range(len(word)):
+            if word[i] == "[":
+                word = word[:i] + "-" + word[i + 1:]
+        word = word[:-1]
+        return(word)

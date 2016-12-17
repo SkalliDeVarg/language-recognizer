@@ -7,7 +7,7 @@ print("Welcome to Leif's neuron based language recognizer with dynamically "
       "accurate prediction. Values above 4 WILL congest your RAM.")
 
 plength = int(input("Pattern length: "))
-print("Minimum word length must be higher or equal than pattern length!")
+print("Minimum word length must be at least " + str(plength - 1) + " !")
 minlength = int(input("Minimum length of words: "))
 maxlength = int(input("Maximum length of words: "))
 word_count = int(input("How many languages to learn: "))
@@ -84,7 +84,7 @@ def ask(word):
     chosen_lang = attempt[2].index(max(attempt[2]))
     if word == "":
         print("Word is from language " + brain.names[attempt[1]] + " !")
-    print(attempt[0] + " <-- " + brain.names[chosen_lang])
+    print(LNeurons.repr_word(attempt[0]) + " <-- " + brain.names[chosen_lang])
     print("")
     for i in range(len(brain.names)):
         print(brain.names[i] + ": " + str(attempt[2][i]))
