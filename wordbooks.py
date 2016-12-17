@@ -42,7 +42,8 @@ converse1 = {
     379: "Z",
     260: "A",
     323: "N",
-    262: "C"
+    262: "C",
+    45: "["
 }
 # All multi letter conversions here.
 converse2 = {
@@ -52,83 +53,6 @@ converse2 = {
     220: "UE",
     338: "OE"
 }
-
-
-def wordbooks(count, minlength, maxlength, name=""):
-    """
-    Warning: old function for simpler importing. Preferably use wordbooks_ask
-
-    This function converts wordlists in name + count + ".txt" format to python
-    lists.
-    It converts all letters to Uppercase A-Z. Strange letters get converted as
-    determined in converse1+2 dict. If not defined the whole word gets deleted.
-    The .txt files should be formatted in "utf_8" and single words have to be
-    split by paragraphs equivalent to "\n".
-
-    "count" is the number of wordlists. Make sure that enough files formatted
-    like 0.txt 1.txt etc. are existent.
-
-    "minlength" is the minimum count of letter per word, less and the word
-    gets deleted.
-
-    "maxlength" it the maximum count of letters per word, more and the word
-    gets deleted.
-    """
-    print("Starting conversion of Wordlists!")
-
-    wb = []
-    for i in range(count):
-        killlist = []
-        wordbook = open(name + str(i) + ".txt", "rb").read()
-        wordbook = wordbook.decode("utf_8")
-        wordbook = wordbook.upper()
-        wordbook = wordbook.split("\n")
-        # only checking for maxlength since the words can grow via the multi
-        # letter conversions
-        wordbook = [word for word in wordbook if len(word) <= maxlength]
-
-        # wordbook[j] = word
-        # wordbook[j][k] = letter of word
-        for j in range(len(wordbook)):
-            strangelist = []
-            for k in range(len(wordbook[j])):
-                index = ord(wordbook[j][k])
-                if index < 65 or index > 90:
-                    if index in converse1:
-                        wordbook[j] = (wordbook[j][:k]
-                                       + converse1[index]
-                                       + wordbook[j][k + 1:])
-                    elif index in converse2:
-                        strangelist.append((j, wordbook[j][k]))
-                    else:
-                        killlist.append(j)
-                        break
-            # Multi Letter conversions have to be dealt with seperately, since
-            # they shift the Letters to the right, messing up the loops and
-            # going over the max letter count.
-            #
-            # Instead of simply swapping the letters, this loop searches for
-            # the given "strange" letter every time and doesn't care about the
-            # individual position. Hence it checks the final length and
-            # deletes.
-            for w in strangelist:
-                index = wordbook[w[0]].index(w[1])
-                wordbook[w[0]] = (wordbook[w[0]][:index]
-                                  + converse2[ord(wordbook[w[0]][index])]
-                                  + wordbook[w[0]][index + 1:])
-
-        for l in range(len(killlist)):
-            wordbook.pop(killlist[l] - l)
-
-        # final trimming to desired word length
-        wordbook = [word for word in wordbook if len(word) >= minlength and
-                       len(word) <= maxlength]
-
-        wb.append(wordbook)
-        print("Conversed Wordlist " + str(i) + " with " + str(len(wordbook))
-              + " words")
-    print("Conversion Done ")
-    return wb
 
 
 def wordbooks_ask(count, minlength, maxlength, namelist):
@@ -196,8 +120,8 @@ def wordbooks_ask(count, minlength, maxlength, namelist):
             wordbook.pop(killlist[l] - l)
 
         # final trimming to desired word length
-        wordbook = [word for word in wordbook if len(word) >= minlength and
-                       len(word) <= maxlength]
+        wordbook = [word + "[" for word in wordbook if len(word) >= minlength
+                    and len(word) <= maxlength]
 
         wb.append(wordbook)
         print("Conversed Wordlist " + str(namelist[i]) + " with "
@@ -239,7 +163,7 @@ def convert(minlength, maxlength, word):
     elif len(word) < minlength:
         word = (word + (minlength - len(word)) * "A")
 
-    return(word)
+    return(word + "[")
 
 
 def check_all():
@@ -299,7 +223,7 @@ def check_word(minlength, maxlength, word):
     for i in range(len(word)):
         index = ord(word[i])
         # Check if letter is in A-Z range.
-        if index < 65 or index > 90:
+        if index < 65 or index > 91:
             return(False)
     return(True)
 

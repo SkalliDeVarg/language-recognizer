@@ -28,6 +28,8 @@ It works like that:
 It converts all words to a standard A-Z form to be more represantative, because recognizing a word by its special chars isn't much
 of an achivement.
 
+New Feature added: The application detects wordends by marking them with a "[". Also words split by "-", get marked that way.
+
 The language files provided are from http://www.winedt.org/dict.html and I converted them to plain .txt files in utf_8.
 They should work out of the box.
 
