@@ -147,54 +147,58 @@ def sentence_menu():
 # Relatively simple menu section.
 decide = 0
 while True:
-    print("")
-    print("1 Train for x-times")
-    print("2 Test success rate for x-words")
-    print("3 Ask for language of a single word")
-    print("4 Get Value of single pattern")
-    print("5 Settings and more")
-    print("6 Exit")
-    decide = int(input("Decision: "))
-    print("")
-
-    if decide == 1:
-        train(int(input("How many random words to train on? : ")))
-
-    if decide == 2:
-        test(int(input("How many random words to test on? : ")))
-
-    if decide == 3:
-        ask(input("Which word? (empty for random) : "))
+    try:
         print("")
-        input("Press ENTER to continue")
-
-    if decide == 4:
-        pos = int(input("Which position?: "))
-        pattern = input("What Pattern?: ")
-        brain.get_pattern(pos, pattern)
+        print("1 Train for x-times")
+        print("2 Test success rate for x-words")
+        print("3 Ask for language of a single word")
+        print("4 Get Value of single pattern")
+        print("5 Settings and more")
+        print("6 Exit")
+        decide = int(input("Decision: "))
         print("")
-        input("Press ENTER to continue")
 
-    if decide == 5:
-        decide2 = 0
-        while decide2 != 4:
+        if decide == 1:
+            train(int(input("How many random words to train on? : ")))
+
+        if decide == 2:
+            test(int(input("How many random words to test on? : ")))
+
+        if decide == 3:
+            ask(input("Which word? (empty for random) : "))
             print("")
-            print("1 Edit lifesign rate")
-            print("2 Learning rate per pattern")
-            print("3 Text/Sentence recognition")
-            print("4 Back")
-            decide2 = int(input("Decision: "))
+            input("Press ENTER to continue")
+
+        if decide == 4:
+            pos = int(input("Which position?: "))
+            pattern = input("What Pattern?: ")
+            brain.get_pattern(pos, pattern)
             print("")
+            input("Press ENTER to continue")
 
-            if decide2 == 1:
-                lifesign = int(input("Rate? (default is 10000): "))
+        if decide == 5:
+            decide2 = 0
+            while decide2 != 4:
+                print("")
+                print("1 Edit lifesign rate")
+                print("2 Learning rate per pattern")
+                print("3 Text/Sentence recognition")
+                print("4 Back")
+                decide2 = int(input("Decision: "))
+                print("")
 
-            if decide2 == 2:
-                set_steps_menu()
+                if decide2 == 1:
+                    lifesign = int(input("Rate? (default is 10000): "))
 
-            if decide2 == 3:
-                sentence_menu()
+                if decide2 == 2:
+                    set_steps_menu()
 
-    if decide == 6:
-        print("Goodbye!")
-        quit()
+                if decide2 == 3:
+                    sentence_menu()
+
+        if decide == 6:
+            print("Goodbye!")
+            quit()
+    except ValueError:
+        pass
+        print("Invalid input!")
