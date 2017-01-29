@@ -1,37 +1,49 @@
-Pattern Length: 4
+Pattern Length: max ---> 25 in this case
 Minimum Word Length: 4
 Maximum Word Length: 25
+A-Z convert?: yes
 
-Trained on: 1.000.000 Words
-Took 6 Minutes 35 Seconds
-Took 3 GB RAM                               compared to version
-Tested on: 100.000                          without word end detection
+Trained on: 500.000 Words (half as much)
+Took 5 Minutes 02 Seconds (0.000604 secs per word)
+Took 5.1 GB RAM (2.1 GB more)               compared to old version
+Tested on: 100.000 Words                    with maxpattern 4
 
-afr success: 62.54190795489180% difficult   6.66% increase
-cze success: 82.64696954366083% easy        4.81% increase
-esp success: 83.34990059642146% easy        4.21% increase
-fre success: 81.88788210694015% easy        4.73% increase
-ger success: 71.37738853503186% difficult   1.68% decrease!
-ita success: 77.30115301934727% medium      9.69% increase
-lat success: 82.72140407504538% easy        0.46% increase
-nla success: 59.27155649461716% difficult   2.40% increase
-pol success: 80.41534181240063% easy        2.80% increase
-swe success: 77.12595266746891% medium      3.02% increase
+afr success: 75.76395150786495% difficult   13.22% increase
+cze success: 89.18320072514857% easy         6.53% increase
+esp success: 88.0697582243361%  easy         4.72% increase
+fre success: 88.42808011329151% easy         6.54% increase
+ger success: 81.62238325281803% medium      10.24% increase
+ita success: 84.7890966971747%  medium       7.49% increase
+lat success: 88.58841010401188% easy         5.87% increase
+nla success: 70.83457971881543% difficult   11.56% increase
+pol success: 86.53479264986444% medium       6.11% increase
+swe success: 91.13634100189223% easy        14.01% increase
 
-Total success: 75.89200000000001%           3.75% increase
+Total success: 84.49600000000001%           8.604% increase
+
+At 750.000 Words: Total success: 86.253%    1.757% increase to prior
 
 
-Trained on: 2.500.000 Words
+Pattern Length: max ---> 25 in this case
+Minimum Word Length: 4
+Maximum Word Length: 25
+A-Z convert?: no!
 
-afr success: 64.30031667134325% difficult
-cze success: 84.82326834680615% easy
-esp success: 84.35048477290098% easy
-fre success: 83.27299058653150% easy
-ger success: 74.13675829232184% medium
-ita success: 79.96717242483686% medium
-lat success: 83.96906803429762% easy
-nla success: 63.03255146002872% difficult
-pol success: 82.21027479091995% medium
-swe success: 79.40705769384653% medium
+Trained on: 500.000 Words
+Took 5.4 GB RAM
+Tested on: 100.000 Words
 
-Total success: 77.94640000000001%
+afr success: 76.91169215589542%
+cze success: 91.75824175824175%
+esp success: 90.04910311654474%
+fre success: 89.77227722772277%
+ger success: 85.2223672322056%
+ita success: 87.6412289395441%
+lat success: 90.47190561887622%
+nla success: 75.12572922953127%
+pol success: 89.31121166415285%
+swe success: 91.36844245628303%
+
+Total success: 86.752%
+
+At 700.000 Words: Total success: 88.04% 
