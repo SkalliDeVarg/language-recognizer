@@ -1,226 +1,148 @@
-import random
-from wordbooks import wordbooks_ask
-from wordbooks import check_word
-from wordbooks import convert
-from wordbooks import check_all
-
-
 class LNeurons:
     """
     This class creates easily usable neurons for language recognition.
     """
-    def __init__(self, names, minlength, maxlength, plength=4):
+    def __init__(self, names, maxpattern):
         """
         Initializes and creates all needed parameters.
         Args:
             names (:obj:"list" of :obj:"str"): Names of the language files.
             minlength (int): Minimum length of evaluated words.
             maxlenght (int): Maximum length of evaluated words.
-            plength (int): Maximum size of the biggest pattern used.
 
         Attr:
             nlang (int): count of all given language files
-            wb (list(list(str))): All wordbooks sorted by language and readily
-                formatted with A-Z letters.
             step (list(float)): Determines which step size is used for which
                 pattern size.
-            rating(list(float)): Determines how "important" each pattern size
             is for evaluation for the neurons.
             ilang(list(float)): helps at initialization of neurons
-            neurons(list(list(list(list(float))))) : Huge list in which all
+            neurons(list(dict(list(float)))) : Huge list in which all
                 neurons are stored.
-                Neurons[i][j][k][l] = float value
-                i = pattern length
-                j = letter position
-                k = letter value (A-Z)
-                l = language index
+                Neurons[i][j][k] = float value
+                i = pattern position
+                j = pattern
+                k = language list
         """
         self.nlang = len(names)
-        self.minlength = minlength + 1
-        self.maxlength = maxlength + 1
-        self.plength = plength
+        self.maxpattern = maxpattern
         self.names = names
 
-        if self.minlength < plength:
-            print("Error, minimum word length has to be bigger or equal "
-                  "to pattern length")
-            quit()
+        self.step = [0.001, 0.01, 0.1, 0.15, 0.2]
 
-        self.wb = wordbooks_ask(self.nlang, self.minlength - 1,
-                                self.maxlength - 1, names)
+        self.ilang = [0.5 for i in range(self.nlang)]
 
-        self.step = [0.00001, 0.0001, 0.001, 0.01]
-        self.rating = [1, 1, 1, 1]
-
-        self.ilang = [1 / self.nlang for i in range(self.nlang)]
-
-        self.neurons = [[[list(self.ilang) for i in range(27**(k + 1))]
-                         for j in range(self.maxlength - k)]
-                         for k in range(self.plength)]
+        self.neurons = [dict() for i in range(3)]
 
         print("Init of neurons " + str(self) + " completed")
 
     def set_step(self, new_step):
         """Sets self.step attribute to new_step."""
-        if len(new_step) == self.plength:
-            self.step = new_step
-        else:
-            print("Error: wrong count of step values given")
+        self.step = new_step
 
-    def set_rating(self, new_rating):
-        """Sets self.rating attribute to new_rating."""
-        if len(new_rating) == self.plength:
-            self.rating = new_rating
-        else:
-            print("Error: wrong count of rating values given")
-
-    def train(self, word="", clang=-1):
+    def train(self, word, clang):
         """
         Trains the neurons on given word.
 
         Args:
-            word (str): given word to train on. Default "" means a random word
-                gets chosen.
-            clang (int): given language index which gets passed.
-
-        Returns:
-            list: list[0] = (str): word on which was trained on.
-                  list[1] = (int): language index of word.
+            word (str): given word to train on.
+            clang (int): given language index.
         """
 
-        if word == "":
-            # One out of the given languages is randomly chosen.
-            chosen_lang = random.choice(list(range(self.nlang)))
+        if clang < 0 or clang > self.nlang:
+            print("Error, impossible Language given!")
+            exit()
 
-            # One random word out of the chosen language is chosen.
-            chosen_word = random.choice(self.wb[chosen_lang])
+        word_len = len(word)
+        if word_len > len(self.neurons):
+            for i in range(word_len - len(self.neurons)):
+                self.neurons.append(dict())
+
+        if self.maxpattern == 0 or self.maxpattern > word_len:
+            m_pat = word_len
         else:
-            if clang < 0 or clang > self.nlang:
-                print("Error, impossible Language given!")
-                exit()
-            chosen_lang = clang
-            chosen_word = word
+            m_pat = self.maxpattern
+        for i in range(m_pat):
+            p_len = i + 1
+            if i >= len(self.step):
+                r_step = self.step[-1]
+            else:
+                r_step = self.step[i]
+            f_step = r_step / (self.nlang - 1)
+            for p_pos in range(word_len + 1 - p_len):
+                pattern = word[p_pos:p_pos + p_len]
 
-        # The word gets converted to an integer list with A = 0 and Z = 25.
-        word_index = [ord(letter) - 65 for letter in chosen_word]
+                if pattern not in self.neurons[p_pos]:
+                    self.neurons[p_pos][pattern] = self.ilang[:]
 
-        # i = individual pattern length
-        # j = letter position corrected per indiv. pattern
-        # k = individual languages
-        for i in range(self.plength):
-            for j in range(len(word_index) - i):
-                index = 0
-                for z in range(i + 1):
-                    # The index number for single and combined letters gets
-                    # determined by multiplying and adding up.
-                    index += word_index[j + z] * 27**z
                 for k in range(self.nlang):
-                    if k == chosen_lang:
-                        self.neurons[i][j][index][k] += self.step[i]
-
-                        if self.neurons[i][j][index][k] > 1:
-                            self.neurons[i][j][index][k] = 1
+                    if k == clang:
+                        self.neurons[p_pos][pattern][k] += r_step
+                        if self.neurons[p_pos][pattern][k] > 1:
+                            self.neurons[p_pos][pattern][k] = 1
                     else:
-                        self.neurons[i][j][index][k] \
-                            -= self.step[i] / (self.nlang - 1)
+                        self.neurons[p_pos][pattern][k] -= f_step
+                        if self.neurons[p_pos][pattern][k] < 0:
+                            self.neurons[p_pos][pattern][k] = 0
+        return
 
-                        if self.neurons[i][j][index][k] < 0:
-                            self.neurons[i][j][index][k] = 0
-
-        return([chosen_word, chosen_lang])
-
-    def test(self, word="", clang=-1):
+    def test(self, word):
         """
         Tests the neurons on given word.
 
         Args:
             word (str): given word to train on. Default "" means a random word
                 gets chosen.
-            clang (int): given language index which gets passed.
 
         Returns:
-            list: list[0] = (str): word on which was trained on.
-                  list[1] = (int): language index of word.
-                  list[2] = (list(float)): individual chances arranged by
-                            language index
+            (list(float)): individual chances arranged by language index
         """
+        word_len = len(word)
+        if word_len > len(self.neurons):
+            for i in range(word_len - len(self.neurons)):
+                self.neurons.append(dict())
 
-        if word == "":
-            # One out of the given languages is randomly chosen.
-            chosen_lang = random.choice(list(range(self.nlang)))
+        o_chance = [0 for x in range(self.nlang)]
 
-            # On random word out of the chosen language is chosen.
-            chosen_word = random.choice(self.wb[chosen_lang])
+        if self.maxpattern == 0 or self.maxpattern > word_len:
+            m_pat = word_len
         else:
-            chosen_lang = clang
-            chosen_word = word
-
-        # The word gets converted to an integer list with A = 0 and Z = 25.
-        word_index = [ord(letter) - 65 for letter in chosen_word]
-
-        # The list for overall chance gets initialised.
-        o_chance = [0 for x in range(self.plength)]
-
-        # i = individual pattern length
-        # j = letter position corrected per indiv. pattern
-        # k = individual languages
-        for i in range(self.plength):
+            m_pat = self.maxpattern
+        for i in range(m_pat):
             chance = [0 for x in range(self.nlang)]
-            for j in range(len(word_index) - i):
-                index = 0
-                for z in range(i + 1):
-                    # The index number for single and combined letters gets
-                    # determined by multiplying and adding up.
-                    index += word_index[j + z] * 27**z
+            p_len = i + 1
+            poss_pos = (word_len + 1 - p_len)
+            for p_pos in range(poss_pos):
+                pattern = word[p_pos:p_pos + p_len]
+
                 for k in range(self.nlang):
-                    # The individual chances as determined in 'Neurons' add up
-                    # per language.
-                    chance[k] += self.neurons[i][j][index][k]
-
-            # Chances are divided by individual count of letter positions.
-            # The different Ratings per pattern are also applied.
-            chance = [x / (len(word_index) - i) * self.rating[i]
-                      for x in chance]
-            # Chances per pattern are collected in o_chance
-            o_chance[i] = chance
-
-        # All pattern chances add up to one individual language chance and are
-        # divided by the pattern count.
-        chance = [0 for x in range(self.nlang)]
-        for i in range(self.nlang):
-            chance[i] = sum([o_chance[x][i] for x in range(self.plength)]) \
-                        / self.plength
+                    if pattern in self.neurons[p_pos]:
+                        chance[k] += self.neurons[p_pos][pattern][k]
+                    else:
+                        chance[k] += 0.5
+            for l in range(len(chance)):
+                o_chance[l] += chance[l] / poss_pos
+        o_chance = [x / m_pat for x in o_chance]
 
         # The list with individual chances per language and the chosen language
         # are returned. If no lang is given, dummy -1 gets returned for
         # chosen_lang.
-        return([chosen_word, chosen_lang, chance])
+        return(o_chance)
 
-    def check_word(self, word):
-        """
-        Checks if word consists of only A-Z and is the right length.
-
-        Args:
-            word (str): given word to check
-
-        Returns:
-            int: 0 if failed 1 for success
-        """
-        return (check_word(self.minlength, self.maxlength, word))
-
-    def convert_word(self, word):
-        """Converts given word to A-Z format and checks length"""
-        return (convert(self.minlength - 1, self.maxlength - 1, word))
+    def get_pattern(self, pos, pattern):
+        pos -= 1
+        if pattern in self.neurons[pos]:
+            rating = self.neurons[pos][pattern]
+            print(pattern + " : ")
+            for i in range(len(rating)):
+                print(self.names[i] + " : " + str(rating[i]))
+        else:
+            print("nothing found")
 
     @staticmethod
-    def check_all():
-        """Checks for foreign letters in wordlist"""
-        check_all()
-
-    @staticmethod
-    def repr_word(word):
-        for i in range(len(word)):
-            if word[i] == "[":
-                word = word[:i] + "-" + word[i + 1:]
+    def repr_word(word, convert):
+        if convert is True:
+            for i in range(len(word)):
+                if word[i] == "[":
+                    word = word[:i] + "-" + word[i + 1:]
         word = word[:-1]
         return(word)
