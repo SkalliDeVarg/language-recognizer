@@ -7,15 +7,13 @@ class LNeurons:
         Initializes and creates all needed parameters.
         Args:
             names (:obj:"list" of :obj:"str"): Names of the language files.
-            minlength (int): Minimum length of evaluated words.
-            maxlenght (int): Maximum length of evaluated words.
+            maxpattern (int): Maximum length of individual patterns.
 
         Attr:
             nlang (int): count of all given language files
             step (list(float)): Determines which step size is used for which
                 pattern size.
-            is for evaluation for the neurons.
-            ilang(list(float)): helps at initialization of neurons
+            ilang(list(float)): helps at initialization of new neurons
             neurons(list(dict(list(float)))) : Huge list in which all
                 neurons are stored.
                 Neurons[i][j][k] = float value
@@ -90,8 +88,7 @@ class LNeurons:
         Tests the neurons on given word.
 
         Args:
-            word (str): given word to train on. Default "" means a random word
-                gets chosen.
+            word (str): given word to train on.
 
         Returns:
             (list(float)): individual chances arranged by language index
@@ -129,6 +126,13 @@ class LNeurons:
         return(o_chance)
 
     def get_pattern(self, pos, pattern):
+        """
+        Prints the chances per language for a specific pattern.
+
+        Args:
+            pos (int): Position of pattern.
+            pattern (str): Pattern which is searcher by user.
+        """
         pos -= 1
         if pattern in self.neurons[pos]:
             rating = self.neurons[pos][pattern]
@@ -140,6 +144,10 @@ class LNeurons:
 
     @staticmethod
     def repr_word(word, convert):
+        """
+        Converts a word back to a standard readable representation.
+        (Strips it of the "[" wordend sign)
+        """
         if convert is True:
             for i in range(len(word)):
                 if word[i] == "[":
